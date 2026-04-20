@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Kiosk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main id="app-container">
+        
+        <!-- Feedback View -->
+        <section id="feedback-view" class="view active">
+            <h1 class="prompt-text">How was your experience today?</h1>
+            <div class="button-container">
+                <button class="feedback-btn btn-happy" data-sentiment="Happy" aria-label="Happy">
+                    <span class="emoji">😊</span>
+                </button>
+                <button class="feedback-btn btn-sad" data-sentiment="Sad" aria-label="Sad">
+                    <span class="emoji">😞</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Thank You View -->
+        <section id="thank-you-view" class="view hidden">
+            <div class="thank-you-content">
+                <div class="checkmark-circle">
+                    <svg viewBox="0 0 52 52" class="checkmark">
+                        <circle cx="26" cy="26" r="25" fill="none" class="checkmark-circle-path"/>
+                        <path fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" class="checkmark-check"/>
+                    </svg>
+                </div>
+                <h2>Thank You!</h2>
+                <p>Your feedback helps us improve.</p>
+            </div>
+        </section>
+
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
