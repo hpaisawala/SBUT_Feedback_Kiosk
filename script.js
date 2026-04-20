@@ -1,99 +1,87 @@
 // --- CONFIGURATION ---
-// REPLACE THIS URL with your deployed Google Apps Script Web App URL
+// Ensure the URL is inside quotes to avoid syntax errors
 const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyntl9KgopGO3kzGrw3Clj2LyPNDmTDArgLHmP-9DIx8clNjOHNOKLZXwfOcAVx6e8i/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Get Location from URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const locationName = urlParams.get('location') || 'Unknown Location';
-    
-    // Log for debugging
-    console.log(`Kiosk initialized for location: ${locationName}`);
+    let activeLocation = '';
 
-    // 2. DOM Elements
+    // 1. DOM Elements
+    const setupView = document.getElementById('setup-view');
     const feedbackView = document.getElementById('feedback-view');
     const thankYouView = document.getElementById('thank-you-view');
-    const buttons = document.querySelectorAll('.feedback-btn');
+    const locationDropdown = document.getElementById('location-dropdown');
+    const startBtn = document.getElementById('start-kiosk');
+    const feedbackButtons = document.querySelectorAll('.feedback-btn');
 
-    // 3. Event Listeners for Buttons
-    buttons.forEach(button => {
+    // 2. Handle Initial Kiosk Setup
+    startBtn.addEventListener('click', () => {
+        const selectedValue = locationDropdown.value;
+        if (selectedValue) {
+            activeLocation = selectedValue;
+            
+            // Hide Setup, Show Feedback
+            setupView.classList.remove('active');
+            setupView.classList.add('hidden');
+            
+            feedbackView.classList.remove('hidden');
+            setTimeout(() => {
+                feedbackView.classList.add('active');
+            }, 50);
+        } else {
+            alert('Please select a location to begin.');
+        }
+    });
+
+    // 3. Feedback Button Listeners
+    feedbackButtons.forEach(button => {
         button.addEventListener('click', function() {
+            if (thankYouView.classList.contains('active')) return;
+            
             const sentiment = this.getAttribute('data-sentiment');
-            handleFeedback(sentiment);
+            const payload = {
+                timestamp: new Date().toISOString(),
+                location: activeLocation, // Use the location from the dropdown
+                sentiment: sentiment
+            };
+
+            sendData(payload);
+            showThankYouScreen();
         });
     });
 
-    // 4. Main Handler Function
-    function handleFeedback(sentiment) {
-        // Prevent multiple clicks while animating
-        if (thankYouView.classList.contains('active')) return;
-
-        const timestamp = new Date().toISOString();
-
-        // Prepare data payload
-        const payload = {
-            timestamp: timestamp,
-            location: locationName,
-            sentiment: sentiment
-        };
-
-        // Send data to webhook
-        sendData(payload);
-
-        // UI Transition
-        showThankYouScreen();
-    }
-
-    // 5. Send Data to Google Apps Script
+    // 4. Data Transmission
     function sendData(data) {
-        if (WEBHOOK_URL === "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL") {
-            console.warn("Webhook URL not configured. Data not sent.", data);
-            return;
-        }
-
         fetch(WEBHOOK_URL, {
             method: 'POST',
-            mode: 'no-cors', // Essential to prevent CORS blocking from Apps Script
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
-        }).then(() => {
-            console.log("Feedback sent successfully (no-cors mode).");
         }).catch(error => {
             console.error("Error sending feedback:", error);
         });
     }
 
-    // 6. UI Transitions
+    // 5. UI Transitions
     function showThankYouScreen() {
-        // Hide Feedback View
         feedbackView.classList.remove('active');
-        feedbackView.classList.add('hidden');
-
-        // Show Thank You View
-        thankYouView.classList.remove('hidden');
-        // Small delay to allow display:block to apply before transition
         setTimeout(() => {
-            thankYouView.classList.add('active');
-        }, 50);
-
-        // Reset after 3 seconds
-        setTimeout(resetViews, 3000);
-    }
-
-    function resetViews() {
-        // Hide Thank You View
-        thankYouView.classList.remove('active');
-        
-        setTimeout(() => {
-            thankYouView.classList.add('hidden');
-            
-            // Show Feedback View
-            feedbackView.classList.remove('hidden');
+            feedbackView.classList.add('hidden');
+            thankYouView.classList.remove('hidden');
             setTimeout(() => {
-                feedbackView.classList.add('active');
+                thankYouView.classList.add('active');
             }, 50);
-        }, 500); // Wait for fade out transition
+        }, 500);
+
+        // Auto-reset to Feedback View after 3 seconds
+        setTimeout(() => {
+            thankYouView.classList.remove('active');
+            setTimeout(() => {
+                thankYouView.classList.add('hidden');
+                feedbackView.classList.remove('hidden');
+                setTimeout(() => {
+                    feedbackView.classList.add('active');
+                }, 50);
+            }, 500);
+        }, 3000);
     }
 });
