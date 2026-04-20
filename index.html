@@ -11,9 +11,22 @@
 </head>
 <body>
     <main id="app-container">
+        <section id="setup-view" class="view active">
+    <h1 class="prompt-text">Select Kiosk Location</h1>
+    <div class="setup-container">
+        <select id="location-dropdown" class="location-select">
+            <option value="" disabled selected>Choose a location...</option>
+            <option value="Canteen">Canteen</option>
+            <option value="Reception">Reception</option>
+            <option value="Meeting Room A">Meeting Room A</option>
+            </select>
+        <button id="start-kiosk" class="start-btn">Start Kiosk</button>
+    </div>
+</section>
+        
         
         <!-- Feedback View -->
-        <section id="feedback-view" class="view active">
+        <section id="feedback-view" class="view hidden">
             <h1 class="prompt-text">How was your experience today?</h1>
             <div class="button-container">
                 <button class="feedback-btn btn-happy" data-sentiment="Happy" aria-label="Happy">
