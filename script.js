@@ -1,6 +1,6 @@
 // --- CONFIGURATION ---
 // REPLACE THIS URL with your deployed Google Apps Script Web App URL
-const WEBHOOK_URL = https://script.google.com/macros/s/AKfycbyntl9KgopGO3kzGrw3Clj2LyPNDmTDArgLHmP-9DIx8clNjOHNOKLZXwfOcAVx6e8i/exec;
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyntl9KgopGO3kzGrw3Clj2LyPNDmTDArgLHmP-9DIx8clNjOHNOKLZXwfOcAVx6e8i/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Get Location from URL parameters
