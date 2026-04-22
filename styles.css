@@ -1,5 +1,5 @@
 :root {
-    --bg-color: #0f172a; /* Deep slate */
+    --bg-color: #0f172a;
     --text-color: #f8fafc;
     --happy-color: #22c55e;
     --happy-glow: rgba(34, 197, 94, 0.4);
@@ -20,19 +20,20 @@ body, html {
     font-family: 'Outfit', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
-    overflow: hidden; /* Prevent scrolling on kiosk */
-    user-select: none; /* Prevent text selection */
+    overflow: hidden; 
+    user-select: none;
     -webkit-user-select: none;
 }
 
 #app-container {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     background: radial-gradient(circle at center, #1e293b 0%, var(--bg-color) 100%);
+    padding: 20px; 
 }
 
 .view {
@@ -49,6 +50,7 @@ body, html {
     opacity: 0;
     pointer-events: none;
     transform: scale(0.95);
+    padding: 20px;
 }
 
 .view.active {
@@ -58,24 +60,32 @@ body, html {
     z-index: 10;
 }
 
-/* Feedback View Styles */
+/* --- Responsive Typography --- */
 .prompt-text {
-    font-size: 4rem;
+    /* Adjusts size automatically between 2rem and 4rem based on screen width */
+    font-size: clamp(2rem, 8vw, 4rem); 
     font-weight: 800;
-    margin-bottom: 4rem;
+    margin-bottom: clamp(2rem, 10vh, 4rem);
     text-align: center;
     text-shadow: 0 4px 12px rgba(0,0,0,0.3);
     letter-spacing: -1px;
+    width: 100%;
+    max-width: 900px;
 }
 
+/* --- Layout for Buttons --- */
 .button-container {
     display: flex;
-    gap: 4rem;
+    flex-wrap: wrap; /* Allows buttons to stack on small screens */
+    justify-content: center;
+    gap: clamp(1.5rem, 5vw, 4rem);
+    width: 100%;
 }
 
 .feedback-btn {
-    width: 300px;
-    height: 300px;
+    /* Responsive width that scales with the viewport */
+    width: clamp(140px, 35vw, 300px);
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
     border: none;
     cursor: pointer;
@@ -100,184 +110,105 @@ body, html {
     opacity: 0.5;
 }
 
-.btn-happy {
-    border: 4px solid var(--happy-color);
-}
-
-.btn-sad {
-    border: 4px solid var(--sad-color);
-}
+.btn-happy { border: 4px solid var(--happy-color); }
+.btn-sad { border: 4px solid var(--sad-color); }
 
 .emoji {
-    font-size: 8rem;
+    font-size: clamp(4rem, 12vw, 8rem);
     filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
     transition: transform 0.3s ease;
 }
 
 /* Hover & Active Effects */
-.btn-happy:hover {
-    box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 40px var(--happy-glow);
-    transform: translateY(-5px);
-}
-.btn-sad:hover {
-    box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 40px var(--sad-glow);
-    transform: translateY(-5px);
-}
+.btn-happy:hover { box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 40px var(--happy-glow); transform: translateY(-5px); }
+.btn-sad:hover { box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 40px var(--sad-glow); transform: translateY(-5px); }
+.btn-happy:hover .emoji, .btn-sad:hover .emoji { transform: scale(1.1); }
+.btn-happy:active, .btn-sad:active { transform: scale(0.92); }
 
-.btn-happy:hover .emoji, .btn-sad:hover .emoji {
-    transform: scale(1.1);
-}
-
-.btn-happy:active {
-    transform: scale(0.92);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3), 0 0 20px var(--happy-glow);
-}
-.btn-sad:active {
-    transform: scale(0.92);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3), 0 0 20px var(--sad-glow);
-}
-
-/* Thank You View Styles */
+/* --- Thank You View --- */
 .thank-you-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     background: var(--card-bg);
-    padding: 5rem;
+    padding: clamp(2rem, 10vw, 5rem);
     border-radius: 2rem;
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     box-shadow: 0 25px 50px rgba(0,0,0,0.4);
     border: 1px solid rgba(255,255,255,0.05);
+    width: 90%;
+    max-width: 600px;
 }
 
 .thank-you-content h2 {
-    font-size: 4rem;
+    font-size: clamp(2.5rem, 8vw, 4rem);
     font-weight: 800;
     margin-bottom: 1rem;
     color: var(--happy-color);
 }
 
 .thank-you-content p {
-    font-size: 1.8rem;
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
     color: #cbd5e1;
-    font-weight: 400;
+    text-align: center;
 }
 
-/* Animated Checkmark */
-.checkmark-circle {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 2rem;
-}
-
-.checkmark {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    display: block;
-    stroke-width: 4;
-    stroke: var(--happy-color);
-    stroke-miterlimit: 10;
-    box-shadow: inset 0px 0px 0px var(--happy-color);
-    animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
-}
-
-.checkmark-circle-path {
-    stroke-dasharray: 166;
-    stroke-dashoffset: 166;
-    stroke-width: 4;
-    stroke-miterlimit: 10;
-    stroke: var(--happy-color);
-    fill: none;
-    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-}
-
-.checkmark-check {
-    transform-origin: 50% 50%;
-    stroke-dasharray: 48;
-    stroke-dashoffset: 48;
-    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
-}
-
-@keyframes stroke {
-    100% { stroke-dashoffset: 0; }
-}
-@keyframes scale {
-    0%, 100% { transform: none; }
-    50% { transform: scale3d(1.1, 1.1, 1); }
-}
-@keyframes fill {
-    100% { box-shadow: inset 0px 0px 0px 30px rgba(34, 197, 94, 0.1); }
-}
-
-/* --- New Setup Screen Styles --- */
-
+/* --- Setup View (Adaptive) --- */
 .setup-container {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     align-items: center;
+    width: 100%;
+    max-width: 500px;
 }
 
 .location-select {
-    padding: 1.5rem 2rem;
-    font-size: 1.8rem;
+    padding: 1.2rem 1.5rem;
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
     border-radius: 1rem;
-    background: var(--card-bg); /* Matches your deep slate theme */
+    background: var(--card-bg);
     color: var(--text-color);
     border: 2px solid rgba(255, 255, 255, 0.2);
-    width: 450px;
+    width: 100%; 
     font-family: 'Outfit', sans-serif;
     cursor: pointer;
     outline: none;
-    appearance: none; /* Removes default browser styling */
+    appearance: none;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
-    background-position: right 1.5rem center;
-    background-size: 1.5em;
-}
-
-.location-select:focus {
-    border-color: var(--happy-color);
+    background-position: right 1rem center;
+    background-size: 1.2em;
 }
 
 .start-btn {
-    padding: 1.5rem 4rem;
-    font-size: 1.8rem;
+    padding: 1.2rem 3rem;
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
     background-color: var(--happy-color);
     color: white;
     border: none;
     border-radius: 1rem;
     font-weight: 800;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-}
-
-.start-btn:active {
-    transform: scale(0.95);
+    width: 100%;
+    max-width: 300px;
 }
 
 /* Helper class to hide sections completely */
-.hidden {
-    display: none !important;
+.hidden { display: none !important; }
+
+/* Animated Checkmark Scaling */
+.checkmark-circle {
+    width: clamp(60px, 15vw, 100px);
+    height: clamp(60px, 15vw, 100px);
+    margin-bottom: 2rem;
 }
 
-/* Responsive adjustments */
-@media (max-width: 800px) {
+/* Media Queries for fine-tuning */
+@media (max-width: 480px) {
     .button-container {
-        gap: 2rem;
-    }
-    .feedback-btn {
-        width: 220px;
-        height: 220px;
-    }
-    .emoji {
-        font-size: 6rem;
-    }
-    .prompt-text {
-        font-size: 3rem;
-        padding: 0 1rem;
+        flex-direction: column; /* Stacks emojis vertically on phones */
+        align-items: center;
     }
 }
