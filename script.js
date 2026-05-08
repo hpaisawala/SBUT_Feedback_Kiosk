@@ -1,7 +1,6 @@
 // --- CONFIGURATION ---
 // Ensure the URL is inside quotes to avoid syntax errors
-const WEBHOOK_URL = "
-https://script.google.com/macros/s/AKfycbwyiGHeVh-m3oJiTczWRgHlESiR0hCCP6og7jXY-3SdQw9dOsaiklUNSdA9cfBrN8kC/exec";
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwyiGHeVh-m3oJiTczWRgHlESiR0hCCP6og7jXY-3SdQw9dOsaiklUNSdA9cfBrN8kC/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
     let activeLocation = '';
